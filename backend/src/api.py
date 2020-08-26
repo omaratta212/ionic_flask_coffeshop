@@ -6,7 +6,7 @@ from flask_cors import CORS
 
 from .database.models import db_drop_and_create_all, setup_db, Drink
 
-from .auth.auth import AuthError
+from .auth.auth import AuthError, requires_auth
 
 app = Flask(__name__)
 setup_db(app)
@@ -145,6 +145,7 @@ def update_drink(drink_id):
 '''
 
 
+@requires_auth
 @app.route('/drinks/<drink_id>', methods=['DELETE'])
 def delete_drink(drink_id):
 	success = False
@@ -201,6 +202,7 @@ def not_found_error(error):
 		"error": 404,
 		"message": str(error),
 	}), 404
+
 
 @app.errorhandler(500)
 def server_error(error):
