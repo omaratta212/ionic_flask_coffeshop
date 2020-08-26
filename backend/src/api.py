@@ -6,7 +6,7 @@ from flask_cors import CORS
 
 from .database.models import db_drop_and_create_all, setup_db, Drink
 
-# from .auth.auth import AuthError, requires_auth
+from .auth.auth import AuthError
 
 app = Flask(__name__)
 setup_db(app)
@@ -199,11 +199,28 @@ def not_found_error(error):
 	return jsonify({
 		"success": False,
 		"error": 404,
-		"message": "Not found",
-		"details": str(error)
+		"message": str(error),
 	}), 404
 
+@app.errorhandler(500)
+def server_error(error):
+	return jsonify({
+		"success": False,
+		"error": 500,
+		"message": str(error),
+	}), 500
+
+
 '''
-@TODO implement error handler for AuthError
+@DONE implement error handler for AuthError
     error handler should conform to general task above 
 '''
+
+
+@app.errorhandler(AuthError)
+def unauthorized_error(error):
+	return jsonify({
+		"success": False,
+		"error": error.status_code,
+		"message": str(error)
+	}), error.status_code
