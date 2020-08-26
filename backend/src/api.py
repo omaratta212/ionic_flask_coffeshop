@@ -118,8 +118,8 @@ def create_drink():
 @app.route('/drinks/<drink_id>', methods=['PATCH'])
 def update_drink(drink_id):
 	success = False
+	drink = Drink.query.get_or_404(drink_id)
 	try:
-		drink = Drink.query.get_or_404(drink_id)
 		drink.title = request.json.get('title')
 		drink.recipe = json.dumps(request.json.get('recipe'))
 		drink.update()
@@ -148,8 +148,8 @@ def update_drink(drink_id):
 @app.route('/drinks/<drink_id>', methods=['DELETE'])
 def delete_drink(drink_id):
 	success = False
-
 	drink = Drink.query.get_or_404(drink_id)
+
 	try:
 		drink.delete()
 		success = True
@@ -178,7 +178,7 @@ def unprocessable(error):
 
 
 '''
-@TODO implement error handlers using the @app.errorhandler(error) decorator
+@DONE implement error handlers using the @app.errorhandler(error) decorator
     each error handler should return (with appropriate messages):
              jsonify({
                     "success": False, 
@@ -189,9 +189,19 @@ def unprocessable(error):
 '''
 
 '''
-@TODO implement error handler for 404
+@DONE implement error handler for 404
     error handler should conform to general task above 
 '''
+
+
+@app.errorhandler(404)
+def not_found_error(error):
+	return jsonify({
+		"success": False,
+		"error": 404,
+		"message": "Not found",
+		"details": str(error)
+	}), 404
 
 '''
 @TODO implement error handler for AuthError
