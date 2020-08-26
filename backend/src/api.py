@@ -114,6 +114,25 @@ def create_drink():
         or appropriate status code indicating reason for failure
 '''
 
+
+@app.route('/drinks/<drink_id>', methods=['PATCH'])
+def update_drink(drink_id):
+	success = False
+	try:
+		drink = Drink.query.get_or_404(drink_id)
+		drink.title = request.json.get('title')
+		drink.recipe = json.dumps(request.json.get('recipe'))
+		drink.update()
+		success = True
+	except Exception as e:
+		print(e)
+
+	return jsonify({
+		"success": success,
+		"drink": drink.long() if success else None
+	})
+
+
 '''
 @TODO implement endpoint
     DELETE /drinks/<id>
@@ -124,6 +143,24 @@ def create_drink():
     returns status code 200 and json {"success": True, "delete": id} where id is the id of the deleted record
         or appropriate status code indicating reason for failure
 '''
+
+
+@app.route('/drinks/<drink_id>', methods=['DELETE'])
+def delete_drink(drink_id):
+	success = False
+
+	drink = Drink.query.get_or_404(drink_id)
+	try:
+		drink.delete()
+		success = True
+	except Exception as e:
+		print(e)
+
+	return jsonify({
+		"success": success,
+		"delete": drink_id
+	})
+
 
 ## Error Handling
 '''
