@@ -80,19 +80,19 @@ def get_token_auth_header():
 
 
 def check_permissions(permission, payload):
-	if 'permissions' not in payload:
-		raise AuthError({
-			'code': '401',
-			'description': 'Un-authenticated.'
-		}, 401)
+    if 'permissions' not in payload:
+        raise AuthError({
+            'code': '401',
+            'description': 'Un-authenticated.'
+        }, 401)
 
-	if permission not in payload['permissions']:
-		raise AuthError({
-			'code': '401',
-			'description': 'Un-authorized.'
-		}, 401)
+    if permission not in payload['permissions']:
+        raise AuthError({
+            'code': '401',
+            'description': 'Un-authorized.'
+        }, 401)
 
-	return True
+    return True
 
 
 
@@ -107,7 +107,7 @@ def check_permissions(permission, payload):
     it should validate the claims
     return the decoded payload
 
-    !!NOTE urlopen has a common certificate error described here: 
+   !!NOTE urlopen has a common certificate error described here: 
     https://stackoverflow.com/questions/50236117/scraping-ssl-certificate-verify-failed-error-for-http-en-wikipedia-org
 '''
 

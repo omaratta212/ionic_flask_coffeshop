@@ -32,19 +32,19 @@ CORS(app)
 
 @app.route('/drinks')
 def drinks():
-	success = False
-	drinks_formatted = {}
-	try:
-		drinks = Drink.query.all()
-		drinks_formatted = [drink.short() for drink in drinks]
-		success = True
-	except Exception as e:
-		print(e)
+    success = False
+    drinks_formatted = {}
+    try:
+        drinks = Drink.query.all()
+        drinks_formatted = [drink.short() for drink in drinks]
+        success = True
+    except Exception as e:
+        print(e)
 
-	return {
-		"success": success,
-		"drinks": drinks_formatted
-	}
+    return {
+        "success": success,
+        "drinks": drinks_formatted
+    }
 
 
 '''
@@ -60,19 +60,19 @@ def drinks():
 @app.route('/drinks-detail')
 @requires_auth('get:drinks-detail')
 def get_drink_details():
-	success = False
-	drinks_formatted = {}
-	try:
-		drinks = Drink.query.all()
-		drinks_formatted = [drink.long() for drink in drinks]
-		success = True
-	except Exception as e:
-		print(e)
+    success = False
+    drinks_formatted = {}
+    try:
+        drinks = Drink.query.all()
+        drinks_formatted = [drink.long() for drink in drinks]
+        success = True
+    except Exception as e:
+        print(e)
 
-	return {
-		"success": success,
-		"drinks": drinks_formatted
-	}
+    return {
+        "success": success,
+        "drinks": drinks_formatted
+    }
 
 
 '''
@@ -89,19 +89,19 @@ def get_drink_details():
 @app.route('/drinks', methods=['POST'])
 @requires_auth('post:drinks')
 def create_drink():
-	success = False
-	drink = Drink(title=request.json.get('title'), recipe=json.dumps(request.json.get('recipe')))
+    success = False
+    drink = Drink(title=request.json.get('title'), recipe=json.dumps(request.json.get('recipe')))
 
-	try:
-		drink.insert()
-		success = True
-	except Exception as e:
-		print(e)
+    try:
+        drink.insert()
+        success = True
+    except Exception as e:
+        print(e)
 
-	return jsonify({
-		"success": success,
-		"drink": drink.long() if success else None
-	})
+    return jsonify({
+        "success": success,
+        "drink": drink.long() if success else None
+    })
 
 
 '''
@@ -120,20 +120,20 @@ def create_drink():
 @app.route('/drinks/<drink_id>', methods=['PATCH'])
 @requires_auth('patch:drinks')
 def update_drink(drink_id):
-	success = False
-	drink = Drink.query.get_or_404(drink_id)
-	try:
-		drink.title = request.json.get('title')
-		drink.recipe = json.dumps(request.json.get('recipe'))
-		drink.update()
-		success = True
-	except Exception as e:
-		print(e)
+    success = False
+    drink = Drink.query.get_or_404(drink_id)
+    try:
+        drink.title = request.json.get('title')
+        drink.recipe = json.dumps(request.json.get('recipe'))
+        drink.update()
+        success = True
+    except Exception as e:
+        print(e)
 
-	return jsonify({
-		"success": success,
-		"drink": drink.long() if success else None
-	})
+    return jsonify({
+        "success": success,
+        "drink": drink.long() if success else None
+    })
 
 
 '''
@@ -151,19 +151,19 @@ def update_drink(drink_id):
 @app.route('/drinks/<drink_id>', methods=['DELETE'])
 @requires_auth('delete:drinks')
 def delete_drink(drink_id):
-	success = False
-	drink = Drink.query.get_or_404(drink_id)
+    success = False
+    drink = Drink.query.get_or_404(drink_id)
 
-	try:
-		drink.delete()
-		success = True
-	except Exception as e:
-		print(e)
+    try:
+        drink.delete()
+        success = True
+    except Exception as e:
+        print(e)
 
-	return jsonify({
-		"success": success,
-		"delete": drink_id
-	})
+    return jsonify({
+        "success": success,
+        "delete": drink_id
+    })
 
 
 ## Error Handling
@@ -174,11 +174,11 @@ Example error handling for unprocessable entity
 
 @app.errorhandler(422)
 def unprocessable(error):
-	return jsonify({
-		"success": False,
-		"error": 422,
-		"message": "unprocessable"
-	}), 422
+    return jsonify({
+        "success": False,
+        "error": 422,
+        "message": "unprocessable"
+    }), 422
 
 
 '''
@@ -200,20 +200,20 @@ def unprocessable(error):
 
 @app.errorhandler(404)
 def not_found_error(error):
-	return jsonify({
-		"success": False,
-		"error": 404,
-		"message": str(error),
-	}), 404
+    return jsonify({
+        "success": False,
+        "error": 404,
+        "message": str(error),
+    }), 404
 
 
 @app.errorhandler(500)
 def server_error(error):
-	return jsonify({
-		"success": False,
-		"error": 500,
-		"message": str(error),
-	}), 500
+    return jsonify({
+        "success": False,
+        "error": 500,
+        "message": str(error),
+    }), 500
 
 
 '''
@@ -224,8 +224,8 @@ def server_error(error):
 
 @app.errorhandler(AuthError)
 def unauthorized_error(error):
-	return jsonify({
-		"success": False,
-		"error": error.status_code,
-		"message": str(error)
-	}), error.status_code
+    return jsonify({
+        "success": False,
+        "error": error.status_code,
+        "message": str(error)
+    }), error.status_code
