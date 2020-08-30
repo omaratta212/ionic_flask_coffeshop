@@ -80,10 +80,20 @@ def get_token_auth_header():
 
 
 def check_permissions(permission, payload):
-    raise AuthError({
-        'code': '828',
-        'description': 'Not implemented.'
-    }, 401)
+	if 'permissions' not in payload:
+		raise AuthError({
+			'code': '401',
+			'description': 'Un-authenticated.'
+		}, 401)
+
+	if permission not in payload['permissions']:
+		raise AuthError({
+			'code': '401',
+			'description': 'Un-authorized.'
+		}, 401)
+
+	return True
+
 
 
 '''
@@ -114,7 +124,7 @@ def verify_decode_jwt(token):
         }, 401)
 
     for key in jwks['keys']:
-        if key['kid'] == unverified_header['kid']:
+        if key	['kid'] == unverified_header['kid']:
             rsa_key = {
                 'kty': key['kty'],
                 'kid': key['kid'],
@@ -175,7 +185,7 @@ def requires_auth(permission=''):
             token = get_token_auth_header()
             payload = verify_decode_jwt(token)
             check_permissions(permission, payload)
-            return f(payload, *args, **kwargs)
+            return f(*args, **kwargs)
 
         return wrapper
 

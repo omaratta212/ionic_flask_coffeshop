@@ -58,6 +58,7 @@ def drinks():
 
 
 @app.route('/drinks-detail')
+@requires_auth('get:drinks-detail')
 def get_drink_details():
 	success = False
 	drinks_formatted = {}
@@ -86,6 +87,7 @@ def get_drink_details():
 
 
 @app.route('/drinks', methods=['POST'])
+@requires_auth('post:drinks')
 def create_drink():
 	success = False
 	drink = Drink(title=request.json.get('title'), recipe=json.dumps(request.json.get('recipe')))
@@ -116,6 +118,7 @@ def create_drink():
 
 
 @app.route('/drinks/<drink_id>', methods=['PATCH'])
+@requires_auth('patch:drinks')
 def update_drink(drink_id):
 	success = False
 	drink = Drink.query.get_or_404(drink_id)
@@ -145,8 +148,8 @@ def update_drink(drink_id):
 '''
 
 
-@requires_auth
 @app.route('/drinks/<drink_id>', methods=['DELETE'])
+@requires_auth('delete:drinks')
 def delete_drink(drink_id):
 	success = False
 	drink = Drink.query.get_or_404(drink_id)
